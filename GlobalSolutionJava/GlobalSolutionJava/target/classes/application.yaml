@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: GlobalSolutionJava
+
+  datasource:
+    url: jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL
+    username: RM556405
+    password: Fiap#2025
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    jpa:
+      database-platform: org.hibernate.dialect.OracleDialect
+      properties:
+        hibernate.format_sql: true
+    # spring.jpa.show-sql: true
+    # spring.jpa.hibernate.ddl-auto: create-drop
+
+  port: 8080
+
+jwt:
+  public:
+    key: classpath:app.pub
+  private:
+    key: classpath:app.key
