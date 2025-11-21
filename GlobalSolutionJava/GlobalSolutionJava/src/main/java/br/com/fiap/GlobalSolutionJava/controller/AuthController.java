@@ -2,8 +2,8 @@ package br.com.fiap.GlobalSolutionJava.controller;
 
 import br.com.fiap.GlobalSolutionJava.config.security.TokenService;
 import br.com.fiap.GlobalSolutionJava.domain.User;
-import br.com.fiap.GlobalSolutionJava.domain.dto.request.LoginRequest;
-import br.com.fiap.GlobalSolutionJava.domain.dto.response.LoginResponse;
+import br.com.fiap.GlobalSolutionJava.dto.request.LoginRequest;
+import br.com.fiap.GlobalSolutionJava.dto.response.LoginResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

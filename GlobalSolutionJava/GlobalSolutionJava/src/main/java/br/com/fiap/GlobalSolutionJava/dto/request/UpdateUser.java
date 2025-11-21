@@ -1,11 +1,9 @@
-package br.com.fiap.GlobalSolutionJava.domain.dto.request;
+package br.com.fiap.GlobalSolutionJava.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateUser(
-        @NotBlank(message = "{user.email.notblank}")
-        String emailUsuario,
+public record UpdateUser(
 
         @NotBlank(message = "{user.username.notblank}")
         String nomeUsuario,
@@ -20,8 +18,6 @@ public record CreateUser(
         Integer mes,
 
         @NotNull(message = "{user.yearofbirth.notblank}")
-        Integer ano,
-
-        @NotBlank(message = "{user.cep.notblank}")
-        String cepUsuario
-) {}
+        Integer ano
+) {
+}

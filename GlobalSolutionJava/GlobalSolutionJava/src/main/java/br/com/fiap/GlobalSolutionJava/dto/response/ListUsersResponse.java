@@ -1,4 +1,4 @@
-package br.com.fiap.GlobalSolutionJava.domain.dto.response;
+package br.com.fiap.GlobalSolutionJava.dto.response;
 
 import br.com.fiap.GlobalSolutionJava.domain.User;
 

@@ -1,10 +1,11 @@
 package br.com.fiap.GlobalSolutionJava.controller;
 
 import br.com.fiap.GlobalSolutionJava.domain.User;
-import br.com.fiap.GlobalSolutionJava.domain.dto.request.CreateUser;
-import br.com.fiap.GlobalSolutionJava.domain.dto.request.UpdateUser;
-import br.com.fiap.GlobalSolutionJava.domain.dto.response.ListUsersResponse;
-import br.com.fiap.GlobalSolutionJava.domain.dto.response.MessageResponse;
+import br.com.fiap.GlobalSolutionJava.dto.request.CreateUser;
+import br.com.fiap.GlobalSolutionJava.dto.request.UpdateUser;
+import br.com.fiap.GlobalSolutionJava.dto.response.GetUserResponse;
+import br.com.fiap.GlobalSolutionJava.dto.response.ListUsersResponse;
+import br.com.fiap.GlobalSolutionJava.dto.response.MessageResponse;
 import br.com.fiap.GlobalSolutionJava.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -52,10 +53,10 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<ListUsersResponse> getById(@PathVariable String id, Locale locale) {
+    public ResponseEntity<GetUserResponse> getById(@PathVariable String id, Locale locale) {
         User user = userService.getById(id, locale);
 
-        return ResponseEntity.ok(ListUsersResponse.fromModel(user));
+        return ResponseEntity.ok(GetUserResponse.fromModel(user));
     }
 
     @PutMapping("/users/{id}")

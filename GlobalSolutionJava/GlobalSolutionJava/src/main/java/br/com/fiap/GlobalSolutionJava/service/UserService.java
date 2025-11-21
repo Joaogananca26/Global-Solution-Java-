@@ -1,7 +1,9 @@
 package br.com.fiap.GlobalSolutionJava.service;
 
 import br.com.fiap.GlobalSolutionJava.domain.User;
-import br.com.fiap.GlobalSolutionJava.domain.dto.request.UpdateUser;
+import br.com.fiap.GlobalSolutionJava.dto.message.EnderecoUsuarioMessage;
+import br.com.fiap.GlobalSolutionJava.dto.request.UpdateUser;
+import br.com.fiap.GlobalSolutionJava.messaging.rabbit.RabbitProducer;
 import br.com.fiap.GlobalSolutionJava.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -22,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final MessageSource messageSource;
     private final PasswordEncoder passwordEncoder;
+    private final RabbitProducer rabbitProducer;
 
     @Transactional
     public User save(User user, String cep) {
@@ -33,6 +36,12 @@ public class UserService {
         User savedUser = userRepository.save(user);
         userRepository.flush();
         userRepository.populateTrails(savedUser.getIdUsuario());
+        //TODO: trocar para Azure
+        rabbitProducer.sendMessage(new EnderecoUsuarioMessage(
+            savedUser.getIdUsuario(),
+            cep
+        ));
+
         return savedUser;
     }
 

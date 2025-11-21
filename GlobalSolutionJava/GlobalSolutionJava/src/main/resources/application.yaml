@@ -1,4 +1,9 @@
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
   application:
     name: GlobalSolutionJava
   messages:
@@ -22,6 +27,11 @@ spring:
     # spring.jpa.hibernate.ddl-auto: create-drop
 
   port: 8080
+
+azure:
+  storage:
+    connection-string: DefaultEndpointsProtocol=https;AccountName=SEU_ACCOUNT;AccountKey=SUA_KEY;EndpointSuffix=core.windows.net
+    queue-name: minha-fila-teste
 
 api:
   security:
