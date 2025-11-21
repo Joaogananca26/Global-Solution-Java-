@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +20,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_usuario", nullable = false, unique = true)
-    private UUID idUsuario;
+    private String idUsuario;
 
     @Column(name = "email_usuario", nullable = false, unique = true)
     private String emailUsuario;
