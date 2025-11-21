@@ -2,15 +2,22 @@ package br.com.fiap.GlobalSolutionJava.exceptions;
 
 import br.com.fiap.GlobalSolutionJava.dto.response.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
+import java.util.Locale;
 
 @RestControllerAdvice
+@AllArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final MessageSource messageSource;
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiError> handleUserNotFound(
@@ -19,11 +26,18 @@ public class GlobalExceptionHandler {
     ) {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
+                ex.getMessage(),
+                null,
+                locale
+        );
+
         ApiError body = new ApiError(
                 Instant.now(),
                 status.value(),
-                "Usuário não encontrado",
-                ex.getMessage(),
+                localizedMessage,
                 request.getRequestURI()
         );
 
@@ -37,11 +51,18 @@ public class GlobalExceptionHandler {
     ) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
+                ex.getMessage(),
+                null,
+                locale
+        );
+
         ApiError body = new ApiError(
                 Instant.now(),
                 status.value(),
-                "Token não encontrado",
-                ex.getMessage(),
+                localizedMessage,
                 request.getRequestURI()
         );
 
@@ -49,17 +70,124 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({TokenErrorGenerator.class})
-    public ResponseEntity<ApiError> handleTokenError(
+    public ResponseEntity<ApiError> handleTokenErrorGenerator(
             TokenErrorGenerator ex,
             HttpServletRequest request
     ) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
+                ex.getMessage(),
+                null,
+                locale
+        );
+
         ApiError body = new ApiError(
                 Instant.now(),
                 status.value(),
-                "Erro ao gerar o token",
+                localizedMessage,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler({GeminiApiKeyNotFound.class})
+    public ResponseEntity<ApiError> handleGeminiApiKeyNotFound(
+            GeminiApiKeyNotFound ex,
+            HttpServletRequest request
+    ) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
                 ex.getMessage(),
+                null,
+                locale
+        );
+
+        ApiError body = new ApiError(
+                Instant.now(),
+                status.value(),
+                localizedMessage,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler({GeminiModelError.class})
+    public ResponseEntity<ApiError> handleGeminiModelError(
+            GeminiModelError ex,
+            HttpServletRequest request
+    ) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
+                ex.getMessage(),
+                null,
+                locale
+        );
+
+        ApiError body = new ApiError(
+                Instant.now(),
+                status.value(),
+                localizedMessage,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler({InvalidJson.class})
+    public ResponseEntity<ApiError> handleInvalidJson(
+            InvalidJson ex,
+            HttpServletRequest request
+    ) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
+                ex.getMessage(),
+                null,
+                locale
+        );
+
+        ApiError body = new ApiError(
+                Instant.now(),
+                status.value(),
+                localizedMessage,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler({ResponseIANotFound.class})
+    public ResponseEntity<ApiError> handleResponseIANotFound(
+            ResponseIANotFound ex,
+            HttpServletRequest request
+    ) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
+                ex.getMessage(),
+                null,
+                locale
+        );
+
+        ApiError body = new ApiError(
+                Instant.now(),
+                status.value(),
+                localizedMessage,
                 request.getRequestURI()
         );
 
@@ -73,11 +201,18 @@ public class GlobalExceptionHandler {
     ) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String localizedMessage = messageSource.getMessage(
+                ex.getMessage(),
+                null,
+                locale
+        );
+
         ApiError body = new ApiError(
                 Instant.now(),
                 status.value(),
-                "Erro interno no servidor",
-                ex.getMessage(),
+                localizedMessage,
                 request.getRequestURI()
         );
 

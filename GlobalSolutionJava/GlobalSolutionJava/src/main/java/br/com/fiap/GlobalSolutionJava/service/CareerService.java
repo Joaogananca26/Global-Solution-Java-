@@ -1,5 +1,9 @@
 package br.com.fiap.GlobalSolutionJava.service;
 
+import br.com.fiap.GlobalSolutionJava.exceptions.GeminiApiKeyNotFound;
+import br.com.fiap.GlobalSolutionJava.exceptions.GeminiModelError;
+import br.com.fiap.GlobalSolutionJava.exceptions.InvalidJson;
+import br.com.fiap.GlobalSolutionJava.exceptions.ResponseIANotFound;
 import br.com.fiap.GlobalSolutionJava.promptAI.CareerPrompt;
 import br.com.fiap.GlobalSolutionJava.dto.request.CareerRequest;
 import br.com.fiap.GlobalSolutionJava.dto.response.CareerResponse;
@@ -50,7 +54,7 @@ public class CareerService {
                 : envApiKey;
 
         if (resolvedKey == null || resolvedKey.isBlank()) {
-            throw new IllegalStateException("GEMINI_API_KEY não definido (nem em application.yaml nem em variável de ambiente).");
+            throw new GeminiApiKeyNotFound();
         }
         this.apiKey = resolvedKey;
 
@@ -70,7 +74,7 @@ public class CareerService {
         try {
             payloadJson = objectMapper.writeValueAsString(payload);
         } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Erro ao serializar payload para JSON.", e);
+            throw new InvalidJson();
         }
 
         String fullPrompt = CareerPrompt.CAREER_PROMPT +
@@ -101,32 +105,32 @@ public class CareerService {
         try {
             Map<String, Object> response = restTemplate.postForObject(url, body, Map.class);
             if (response == null) {
-                throw new IllegalStateException("Resposta vazia do modelo de IA.");
+                throw new ResponseIANotFound();
             }
 
             List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.get("candidates");
             if (candidates == null || candidates.isEmpty()) {
-                throw new IllegalStateException("Resposta da IA não continha candidatos.");
+                throw new ResponseIANotFound();
             }
 
             Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
             if (content == null) {
-                throw new IllegalStateException("Resposta da IA não continha conteúdo.");
+                throw new ResponseIANotFound();
             }
 
             List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
             if (parts == null || parts.isEmpty()) {
-                throw new IllegalStateException("Resposta da IA não continha partes.");
+                throw new ResponseIANotFound();
             }
 
             Object text = parts.get(0).get("text");
             if (text == null) {
-                throw new IllegalStateException("Resposta da IA não continha texto.");
+                throw new ResponseIANotFound();
             }
 
             return text.toString();
         } catch (RestClientException e) {
-            throw new IllegalStateException("Erro ao chamar modelo de IA: " + e.getMessage(), e);
+            throw new GeminiModelError();
         }
     }
 
@@ -149,7 +153,7 @@ public class CareerService {
         int startBrace = raw.indexOf('{');
         int endBrace = raw.lastIndexOf('}');
         if (startBrace == -1 || endBrace == -1 || endBrace <= startBrace) {
-            throw new IllegalStateException("Resposta da IA não continha um JSON reconhecível.");
+            throw new InvalidJson();
         }
 
         String jsonStr = raw.substring(startBrace, endBrace + 1);
@@ -157,7 +161,7 @@ public class CareerService {
         try {
             return objectMapper.readValue(jsonStr, CareerResponse.class);
         } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Resposta da IA não estava em JSON válido.", e);
+            throw new InvalidJson();
         }
     }
 }
