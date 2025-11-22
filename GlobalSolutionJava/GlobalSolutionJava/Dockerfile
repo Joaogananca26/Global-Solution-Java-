@@ -5,10 +5,9 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests -Dmaven.compiler.parameters=true
 
-# build api
-FROM openjdk:21-jdk-slim
+# runtime / api
+FROM eclipse-temurin:21-jre
 
-# criando usuario nao-root
 ENV APP_USER=appuser \
     APP_HOME=/opt/global-solution-java \
     APP_PORT=8080
@@ -16,7 +15,6 @@ ENV APP_USER=appuser \
 RUN useradd -m -d ${APP_HOME} ${APP_USER} && \
     chown ${APP_USER}:${APP_USER} ${APP_HOME}
 
-# setando workdir
 WORKDIR ${APP_HOME}
 RUN chown ${APP_USER}:${APP_USER} ${APP_HOME}
 
